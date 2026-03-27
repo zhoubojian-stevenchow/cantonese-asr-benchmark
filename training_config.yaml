@@ -1,0 +1,64 @@
+# Cantonese ASR Fine-tuning Configuration
+# Whisper-small + LoRA on Common Voice zh-HK + yue
+
+model:
+  name: "openai/whisper-small"
+  language: "zh"
+  task: "transcribe"
+
+lora:
+  r: 8
+  alpha: 16
+  dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "v_proj"
+  bias: "none"
+
+data:
+  # Using fsicoli community mirror (mozilla-foundation migrated off HF Oct 2025)
+  dataset: "fsicoli/common_voice_17_0"
+  language_codes:
+    - "zh-HK"
+    - "yue"
+  max_duration_s: 30.0
+  min_duration_s: 1.0
+  sampling_rate: 16000
+  remove_punctuation: true
+  normalize_unicode: true
+  add_jyutping: true
+  tag_code_switch: true
+
+training:
+  output_dir: "./checkpoints/whisper-small-cantonese-lora"
+  num_train_epochs: 10
+  per_device_train_batch_size: 16
+  per_device_eval_batch_size: 8
+  gradient_accumulation_steps: 2
+  learning_rate: 1.0e-4
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  bf16: true  # Use bf16 on A100; fp16 causes dtype mismatch during generate()
+  eval_strategy: "steps"
+  eval_steps: 500
+  save_strategy: "steps"
+  save_steps: 500
+  save_total_limit: 3
+  logging_steps: 50
+  load_best_model_at_end: true
+  metric_for_best_model: "cer"
+  greater_is_better: false
+  push_to_hub: false
+  report_to: "none"
+
+evaluation:
+  metrics:
+    - "cer"
+    - "mer"
+    - "tone_acc"
+    - "cs_f1"
+  error_analysis:
+    tone_confusion: true
+    lazy_pronunciation: true
+    code_switch_boundary: true
