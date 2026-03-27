@@ -1,0 +1,29 @@
+# Core ML
+torch>=2.1.0
+torchaudio>=2.1.0
+transformers>=4.36.0
+datasets==2.21.0
+accelerate>=0.25.0
+peft>=0.7.0
+
+# Audio processing
+librosa>=0.10.0
+soundfile>=0.12.0
+
+# Cantonese NLP
+pycantonese>=3.4.0
+
+# Evaluation
+jiwer>=3.0.0
+evaluate>=0.4.0
+
+# Data & utilities
+numpy>=1.24.0
+pandas>=2.0.0
+pyyaml>=6.0
+tqdm>=4.65.0
+opencc-python-reimplemented>=0.1.7
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
